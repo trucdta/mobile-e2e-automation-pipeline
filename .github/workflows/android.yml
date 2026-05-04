@@ -48,6 +48,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --ignore-engines --ignore-scripts
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Static Analysis (ESLint, Prettier, tsc)
         run: |
           yarn lint
@@ -102,6 +105,9 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --ignore-engines --ignore-scripts
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
       - name: Build Android Release Build
         run: yarn android.release
