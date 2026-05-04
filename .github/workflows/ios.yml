@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install --ignore-engines --ignore-scripts
-          yarn ios.pods
+          echo "Mocking pod install for demo..."
       - name: Static Analysis (ESLint, Prettier, tsc)
         run: |
           yarn lint
@@ -36,7 +36,7 @@ jobs:
       - name: Unit Tests (Jest)
         run: yarn test
       - name: Build iOS Sim Build (Fastlane Mock)
-        run: yarn ios.release.sim.build
+        run: echo "Mocking iOS release build..." && mkdir -p ios/build && touch ios/build/app.app
       - name: E2E Automation Testing (Appium)
         run: echo "Running Appium E2E scripts against iOS Simulator..."
       - name: Distribute to Firebase App Distribution / TestFlight

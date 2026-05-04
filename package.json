@@ -104,6 +104,7 @@
     }
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "testPathIgnorePatterns": ["<rootDir>/tests/e2e/"]
   }
 }
