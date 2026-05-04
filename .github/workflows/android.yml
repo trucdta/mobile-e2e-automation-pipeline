@@ -46,10 +46,16 @@ jobs:
           java-version: '8'
 
       - name: Setup Android NDK
+        id: setup-ndk
         uses: nttld/setup-ndk@v1
         with:
           ndk-version: r21e
           link-to-sdk: true
+
+      - name: Set NDK path for Gradle
+        run: |
+          echo "ndk.dir=${{ steps.setup-ndk.outputs.ndk-path }}" >> local.properties
+          echo "ANDROID_NDK_HOME=${{ steps.setup-ndk.outputs.ndk-path }}" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: yarn install --ignore-engines --ignore-scripts
@@ -110,10 +116,16 @@ jobs:
           java-version: '8'
 
       - name: Setup Android NDK
+        id: setup-ndk
         uses: nttld/setup-ndk@v1
         with:
           ndk-version: r21e
           link-to-sdk: true
+
+      - name: Set NDK path for Gradle
+        run: |
+          echo "ndk.dir=${{ steps.setup-ndk.outputs.ndk-path }}" >> local.properties
+          echo "ANDROID_NDK_HOME=${{ steps.setup-ndk.outputs.ndk-path }}" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: yarn install --ignore-engines --ignore-scripts
