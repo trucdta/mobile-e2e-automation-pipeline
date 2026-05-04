@@ -19,9 +19,9 @@ jobs:
         node-version: [16.x]
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
@@ -40,7 +40,7 @@ jobs:
       - name: Distribute to Firebase App Distribution / Google Play
         run: echo "Uploading to Firebase via Fastlane..."
       - name: Archive Apps
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Android SauceLabs Sample App Espresso Tests
           path: '**/app/build/outputs/apk/**/*.apk'
@@ -51,9 +51,9 @@ jobs:
         node-version: [16.x]
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
@@ -63,7 +63,7 @@ jobs:
       - name: Distribute to Google Play (Fastlane)
         run: echo "Uploading AAB to Google Play Console..."
       - name: Archive Apps
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Android SauceLabs Sample App Release
           path: '**/app/build/outputs/apk/release/**/*.apk'
