@@ -13,15 +13,15 @@ defaults:
     working-directory: ios
 jobs:
   SimulatorRelease:
-    runs-on: macos-latest
+    runs-on: macos-13
     strategy:
       matrix:
         node-version: [14.x]
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
@@ -31,7 +31,7 @@ jobs:
       - name: Build iOS Sim Build
         run: yarn ios.release.sim.build
       - name: Archive App
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: iOS SauceLabs Sample App Sim Build
           path: '**/Build/Products/Release-iphonesimulator/SwagLabsMobileApp.app'

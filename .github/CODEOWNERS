@@ -1,0 +1,17 @@
+# Global fallback
+* @mobile-lead
+
+# Application Source Code
+
+/src/                 @mobile-lead @dev-team
+/ios/                 @mobile-lead
+/android/             @mobile-lead
+
+# Quality Assurance & Automation
+
+/tests/e2e/           @qc-lead
+
+# Infrastructure & CI/CD
+
+/fastlane/            @devops-team @mobile-lead
+/.github/workflows/   @devops-team @mobile-lead
