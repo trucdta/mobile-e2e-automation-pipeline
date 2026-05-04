@@ -142,7 +142,7 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
           groups: demo-team
-          file: android/app/build/outputs/apk/release/app-release.apk
+          file: android/app/build/outputs/apk/release/Android.SauceLabs.Sample.App.release.3.0.0.apk
 
       - name: Distribute to Google Play (Fastlane)
         run: echo "Uploading AAB to Google Play Console..."
