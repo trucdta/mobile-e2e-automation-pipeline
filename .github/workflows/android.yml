@@ -39,6 +39,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Setup Java 8
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '8'
+
       - name: Install dependencies
         run: yarn install --ignore-engines --ignore-scripts
 
@@ -51,8 +57,8 @@ jobs:
       - name: Unit Tests (Jest)
         run: yarn test
 
-      - name: Build Android Espresso Debug Build (Fastlane Mock)
-        run: echo "Mocking Android Espresso Build..." && mkdir -p android/app/build/outputs/apk && touch android/app/build/outputs/apk/app-debug.apk
+      - name: Build Android Espresso Debug Build
+        run: yarn android.espresso
 
       - name: E2E Automation Testing (Appium)
         run: echo "Running Appium E2E scripts against Android Emulator..."
@@ -88,11 +94,25 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Setup Java 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '8'
+
       - name: Install dependencies
         run: yarn install --ignore-engines --ignore-scripts
 
-      - name: Build Android Release (Fastlane)
-        run: echo "Mocking Android Release Build..." && mkdir -p android/app/build/outputs/apk/release && touch android/app/build/outputs/apk/release/app-release.apk
+      - name: Build Android Release Build
+        run: yarn android.release
+
+      - name: Distribute to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          groups: demo-team
+          file: android/app/build/outputs/apk/release/app-release.apk
 
       - name: Distribute to Google Play (Fastlane)
         run: echo "Uploading AAB to Google Play Console..."
