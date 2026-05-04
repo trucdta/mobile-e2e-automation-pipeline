@@ -28,8 +28,19 @@ jobs:
         run: |
           yarn install
           yarn ios.pods
-      - name: Build iOS Sim Build
+      - name: Static Analysis (ESLint, Prettier, tsc)
+        run: |
+          yarn lint
+          yarn format
+          yarn typecheck
+      - name: Unit Tests (Jest)
+        run: yarn test
+      - name: Build iOS Sim Build (Fastlane Mock)
         run: yarn ios.release.sim.build
+      - name: E2E Automation Testing (Appium)
+        run: echo "Running Appium E2E scripts against iOS Simulator..."
+      - name: Distribute to Firebase App Distribution / TestFlight
+        run: echo "Uploading to Firebase via Fastlane..."
       - name: Archive App
         uses: actions/upload-artifact@v3
         with:

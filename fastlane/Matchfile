@@ -1,0 +1,8 @@
+git_url("https://github.com/trucdta/certificates.git")
+
+storage_mode("git")
+
+type("development") # The default type, can be: appstore, adhoc, enterprise or development
+
+# app_identifier(["com.saucelabs.SwagLabsMobileApp"])
+# username("user@apple.com") # Your Apple Developer Portal username

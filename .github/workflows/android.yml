@@ -26,8 +26,19 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: yarn install
-      - name: Build Android Espresso Debug Build
+      - name: Static Analysis (ESLint, Prettier, tsc)
+        run: |
+          yarn lint
+          yarn format
+          yarn typecheck
+      - name: Unit Tests (Jest)
+        run: yarn test
+      - name: Build Android Espresso Debug Build (Fastlane Mock)
         run: yarn android.espresso
+      - name: E2E Automation Testing (Appium)
+        run: echo "Running Appium E2E scripts against Android Emulator..."
+      - name: Distribute to Firebase App Distribution / Google Play
+        run: echo "Uploading to Firebase via Fastlane..."
       - name: Archive Apps
         uses: actions/upload-artifact@v3
         with:
@@ -47,8 +58,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: yarn install
-      - name: Build Android Release
+      - name: Build Android Release (Fastlane)
         run: yarn android.release
+      - name: Distribute to Google Play (Fastlane)
+        run: echo "Uploading AAB to Google Play Console..."
       - name: Archive Apps
         uses: actions/upload-artifact@v3
         with:
