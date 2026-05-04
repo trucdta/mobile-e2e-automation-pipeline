@@ -46,3 +46,38 @@ jobs:
         with:
           name: iOS Sakulala Demo Sample App Sim Build
           path: '**/build/app.app'
+  # ReleaseBuild:
+  #   runs-on: macos-latest
+  #   # Note: When migrating to Mac Mini, change 'macos-latest' to ['self-hosted', 'macOS', 'ARM64']
+  #   strategy:
+  #     matrix:
+  #       node-version: [16.x]
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v4
+  #     - name: Setup Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
+  #     - name: Install dependencies
+  #       run: |
+  #         yarn install --ignore-engines --ignore-scripts
+  #         echo "Mocking pod install..."
+  #     - name: Sync Apple Certificates (Fastlane Match)
+  #       env:
+  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_TOKEN }}
+  #       run: echo "[PENDING] Requires Mac Mini & Apple Dev Account. Mocking match appstore..."
+  #     - name: Build iOS Production Release (Fastlane)
+  #       run: echo "Mocking iOS IPA Build..." && mkdir -p ios/build && touch ios/build/app-release.ipa
+  #     - name: Distribute to TestFlight (Fastlane Pilot)
+  #       env:
+  #         APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
+  #         APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
+  #         APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_KEY_CONTENT }}
+  #       run: echo "Uploading IPA to Apple TestFlight..."
+  #     - name: Archive App
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: iOS Sakulala Demo Sample App Release
+  #         path: '**/build/app-release.ipa'
