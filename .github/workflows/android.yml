@@ -8,9 +8,19 @@ on:
       - 'ios/**'
       - '**.md'
       - '**/ios.yml'
+
 defaults:
   run:
     working-directory: android
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Environment variables shared across all jobs
+# Format: v{app_version}-build.{run_number}-{short_sha}
+# Example: v3.0.0-build.42-abc1d2e
+# ─────────────────────────────────────────────────────────────────────────────
+env:
+  APP_VERSION: "3.0.0"
+
 jobs:
   EspressoBuild:
     runs-on: ubuntu-latest
@@ -20,30 +30,42 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+
       - name: Install dependencies
         run: yarn install --ignore-engines --ignore-scripts
+
       - name: Static Analysis (ESLint, Prettier, tsc)
         run: |
           yarn lint
           yarn format
           yarn typecheck
+
       - name: Unit Tests (Jest)
         run: yarn test
+
       - name: Build Android Espresso Debug Build (Fastlane Mock)
         run: echo "Mocking Android Espresso Build..." && mkdir -p android/app/build/outputs/apk && touch android/app/build/outputs/apk/app-debug.apk
+
       - name: E2E Automation Testing (Appium)
         run: echo "Running Appium E2E scripts against Android Emulator..."
+        # When running on Mac Mini, replace with: yarn android.test.local.emu
+
       - name: Distribute to Firebase App Distribution / Google Play
         run: echo "Uploading to Firebase via Fastlane..."
+
       - name: Archive Apps
         uses: actions/upload-artifact@v4
         with:
-          name: Android Sakulala Demo Sample App Espresso Tests
+          # Naming convention: Android-Sakulala-v{version}-build.{number}-{short_sha}-espresso
+          name: Android-Sakulala-v${{ env.APP_VERSION }}-build.${{ github.run_number }}-${{ github.sha && github.sha || 'local' }}-espresso
           path: '**/app/build/outputs/apk/**/*.apk'
+          retention-days: 30
+
   ReleaseBuild:
     runs-on: ubuntu-latest
     strategy:
@@ -52,18 +74,25 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+
       - name: Install dependencies
         run: yarn install --ignore-engines --ignore-scripts
+
       - name: Build Android Release (Fastlane)
         run: echo "Mocking Android Release Build..." && mkdir -p android/app/build/outputs/apk/release && touch android/app/build/outputs/apk/release/app-release.apk
+
       - name: Distribute to Google Play (Fastlane)
         run: echo "Uploading AAB to Google Play Console..."
+
       - name: Archive Apps
         uses: actions/upload-artifact@v4
         with:
-          name: Android Sakulala Demo Sample App Release
+          # Naming convention: Android-Sakulala-v{version}-build.{number}-{short_sha}-release
+          name: Android-Sakulala-v${{ env.APP_VERSION }}-build.${{ github.run_number }}-${{ github.sha && github.sha || 'local' }}-release
           path: '**/app/build/outputs/apk/release/**/*.apk'
+          retention-days: 30

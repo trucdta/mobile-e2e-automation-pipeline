@@ -1,10 +1,10 @@
 import { browserIsOpened, languageSelectors, openDeepLinkUrl, restartApp } from '../../helpers/utils';
-import LoginScreen from '../../screenObjects/login';
-import InventoryListScreen from '../../screenObjects/inventoryList';
-import InventoryItemScreen from '../../screenObjects/inventoryItem';
-import AppHeader from '../../screenObjects/appHeader';
-import Menu from '../../screenObjects/menu';
-import Webview from '../../screenObjects/webview';
+import LoginScreen from '../../pageObjects/login';
+import InventoryListScreen from '../../pageObjects/inventoryList';
+import InventoryItemScreen from '../../pageObjects/inventoryItem';
+import AppHeader from '../../pageObjects/appHeader';
+import Menu from '../../pageObjects/menu';
+import Webview from '../../pageObjects/webview';
 
 describe('Menu', () => {
   const SELECTORS = languageSelectors();

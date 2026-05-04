@@ -1,5 +1,5 @@
-import LoginScreen from '../../screenObjects/login';
-import InventoryListScreen from '../../screenObjects/inventoryList';
+import LoginScreen from '../../pageObjects/login';
+import InventoryListScreen from '../../pageObjects/inventoryList';
 import { languageSelectors, restartApp } from '../../helpers/utils';
 import { LOGIN_USERS } from '../../helpers/e2eConstants';
 import Gestures from '../../helpers/Gestures';

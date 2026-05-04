@@ -1,4 +1,4 @@
-import InventoryListScreen from '../../screenObjects/inventoryList';
+import InventoryListScreen from '../../pageObjects/inventoryList';
 import { DEFAULT_TIMEOUT } from '../../helpers/e2eConstants';
 
 describe('Test 3D Touch', () => {

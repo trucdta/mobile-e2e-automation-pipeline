@@ -1,13 +1,13 @@
 import { openDeepLinkUrl, restartApp } from '../../helpers/utils';
-import LoginScreen from '../../screenObjects/login';
-import InventoryListScreen from '../../screenObjects/inventoryList';
-import AppHeader from '../../screenObjects/appHeader';
-import InventoryItemScreen from '../../screenObjects/inventoryItem';
-import CartContent from '../../screenObjects/cart';
-import CheckoutPageOne from '../../screenObjects/checkoutPageOne';
-import CheckoutPageTwo from '../../screenObjects/checkoutPageTwo';
-import CheckoutComplete from '../../screenObjects/checkoutComplete';
-import Webview from '../../screenObjects/webview';
+import LoginScreen from '../../pageObjects/login';
+import InventoryListScreen from '../../pageObjects/inventoryList';
+import AppHeader from '../../pageObjects/appHeader';
+import InventoryItemScreen from '../../pageObjects/inventoryItem';
+import CartContent from '../../pageObjects/cart';
+import CheckoutPageOne from '../../pageObjects/checkoutPageOne';
+import CheckoutPageTwo from '../../pageObjects/checkoutPageTwo';
+import CheckoutComplete from '../../pageObjects/checkoutComplete';
+import Webview from '../../pageObjects/webview';
 
 describe('Deep linking', () => {
 	beforeEach(() => {

@@ -1,6 +1,6 @@
 import { openDeepLinkUrl, restartApp } from '../../helpers/utils';
-import LoginScreen from '../../screenObjects/login';
-import GeoLocation from '../../screenObjects/geo.location';
+import LoginScreen from '../../pageObjects/login';
+import GeoLocation from '../../pageObjects/geo.location';
 
 describe('Geo Location Page', () => {
 	beforeEach(() => {

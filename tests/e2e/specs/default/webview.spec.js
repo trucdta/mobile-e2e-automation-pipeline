@@ -1,6 +1,6 @@
 import { languageSelectors, openDeepLinkUrl, restartApp } from '../../helpers/utils';
-import LoginScreen from '../../screenObjects/login';
-import Webview, { CONTEXT_REF } from '../../screenObjects/webview';
+import LoginScreen from '../../pageObjects/login';
+import Webview, { CONTEXT_REF } from '../../pageObjects/webview';
 
 describe('Menu', () => {
 	const SELECTORS = languageSelectors();

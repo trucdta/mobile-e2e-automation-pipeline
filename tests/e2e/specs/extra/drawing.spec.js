@@ -1,6 +1,6 @@
 import { openDeepLinkUrl, restartApp } from '../../helpers/utils';
-import LoginScreen from '../../screenObjects/login';
-import Drawing from '../../screenObjects/drawing';
+import LoginScreen from '../../pageObjects/login';
+import Drawing from '../../pageObjects/drawing';
 
 describe('Drawing', () => {
 	beforeEach(() => {

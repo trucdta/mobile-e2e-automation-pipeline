@@ -1,7 +1,7 @@
 import { languageSelectors, openDeepLinkUrl, restartApp } from '../../helpers/utils';
-import LoginScreen from '../../screenObjects/login';
-import CheckoutPageTwo from '../../screenObjects/checkoutPageTwo';
-import CheckoutComplete from '../../screenObjects/checkoutComplete';
+import LoginScreen from '../../pageObjects/login';
+import CheckoutPageTwo from '../../pageObjects/checkoutPageTwo';
+import CheckoutComplete from '../../pageObjects/checkoutComplete';
 
 describe('Checkout: Overview', () => {
   const SELECTORS = languageSelectors();

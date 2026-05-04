@@ -1,7 +1,7 @@
 import { openDeepLinkUrl, restartApp } from '../../helpers/utils';
-import LoginScreen from '../../screenObjects/login';
-import InventoryListScreen from '../../screenObjects/inventoryList';
-import CheckoutComplete from '../../screenObjects/checkoutComplete';
+import LoginScreen from '../../pageObjects/login';
+import InventoryListScreen from '../../pageObjects/inventoryList';
+import CheckoutComplete from '../../pageObjects/checkoutComplete';
 
 describe('Checkout Complete', () => {
 	beforeEach(() => {

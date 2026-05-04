@@ -1,9 +1,9 @@
 import { languageSelectors, restartApp } from '../../helpers/utils';
-import LoginScreen from '../../screenObjects/login';
-import InventoryListScreen from '../../screenObjects/inventoryList';
-import InventoryItemScreen from '../../screenObjects/inventoryItem';
-import AppHeader from '../../screenObjects/appHeader';
-import ModalSelect from '../../screenObjects/sortingModal';
+import LoginScreen from '../../pageObjects/login';
+import InventoryListScreen from '../../pageObjects/inventoryList';
+import InventoryItemScreen from '../../pageObjects/inventoryItem';
+import AppHeader from '../../pageObjects/appHeader';
+import ModalSelect from '../../pageObjects/sortingModal';
 import { LOGIN_USERS } from '../../helpers/e2eConstants';
 
 describe('Swag row overview page', () => {

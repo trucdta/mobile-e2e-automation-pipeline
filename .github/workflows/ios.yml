@@ -8,9 +8,19 @@ on:
       - 'android/**'
       - '**.md'
       - '**/android.yml'
+
 defaults:
   run:
     working-directory: ios
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Environment variables shared across all jobs
+# Format: v{app_version}-build.{run_number}-{short_sha}
+# Example: v3.0.0-build.42-abc1d2e
+# ─────────────────────────────────────────────────────────────────────────────
+env:
+  APP_VERSION: "3.0.0"
+
 jobs:
   SimulatorRelease:
     runs-on: macos-latest
@@ -20,35 +30,53 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+
       - name: Install dependencies
         run: |
           yarn install --ignore-engines --ignore-scripts
           echo "Mocking pod install for demo..."
+
       - name: Static Analysis (ESLint, Prettier, tsc)
         run: |
           yarn lint
           yarn format
           yarn typecheck
+
       - name: Unit Tests (Jest)
         run: yarn test
+
       - name: Build iOS Sim Build (Fastlane Mock)
         run: echo "Mocking iOS release build..." && mkdir -p ios/build && touch ios/build/app.app
+
       - name: E2E Automation Testing (Appium)
         run: echo "Running Appium E2E scripts against iOS Simulator..."
+        # When running on Mac Mini, replace with: yarn ios.test.local.sim
+
       - name: Distribute to Firebase App Distribution / TestFlight
         run: echo "Uploading to Firebase via Fastlane..."
+
       - name: Archive App
         uses: actions/upload-artifact@v4
         with:
-          name: iOS Sakulala Demo Sample App Sim Build
+          # Naming convention: iOS-Sakulala-v{version}-build.{number}-{short_sha}-simulator
+          name: iOS-Sakulala-v${{ env.APP_VERSION }}-build.${{ github.run_number }}-${{ github.sha && github.sha || 'local' }}-simulator
           path: '**/build/app.app'
+          retention-days: 30
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # ReleaseBuild: Pending Mac Mini M1 Self-hosted Runner + Apple Developer Account
+  # To activate:
+  #   1. Change runs-on to: [self-hosted, macOS, ARM64]
+  #   2. Add secrets: APP_STORE_KEY_ID, APP_STORE_ISSUER_ID, APP_STORE_KEY_CONTENT
+  #   3. Add secrets: MATCH_PASSWORD, MATCH_GIT_TOKEN
+  # ─────────────────────────────────────────────────────────────────────────────
   # ReleaseBuild:
   #   runs-on: macos-latest
-  #   # Note: When migrating to Mac Mini, change 'macos-latest' to ['self-hosted', 'macOS', 'ARM64']
   #   strategy:
   #     matrix:
   #       node-version: [16.x]
@@ -79,5 +107,6 @@ jobs:
   #     - name: Archive App
   #       uses: actions/upload-artifact@v4
   #       with:
-  #         name: iOS Sakulala Demo Sample App Release
+  #         name: iOS-Sakulala-v${{ env.APP_VERSION }}-build.${{ github.run_number }}-${{ github.sha && github.sha || 'local' }}-release
   #         path: '**/build/app-release.ipa'
+  #         retention-days: 90

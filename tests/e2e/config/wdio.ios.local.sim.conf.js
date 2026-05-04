@@ -10,12 +10,12 @@ const { config } = require('./wdio.appium.local.shared');
 config.capabilities = [
 	{
 		// The defaults you need to have in your config
-		deviceName: 'iPhone 11',
+		deviceName: 'iPhone 15',
 		platformName: 'iOS',
-		platformVersion: '13.7',
+		platformVersion: '17.0',
 		orientation: 'PORTRAIT',
-		// The path to the app
-		app: join(process.cwd(), './apps/iOS.Simulator.SauceLabs.Mobile.Sample.app.2.7.1.zip'),
+		// Path to .app file built by the SimulatorRelease job in ios.yml
+		app: join(process.cwd(), './ios/build/app.app'),
 		// Read the reset strategies very well, they differ per platform, see
 		// http://appium.io/docs/en/writing-running-appium/other/reset-strategies/
 		noReset: true,

@@ -1,9 +1,9 @@
 import { languageSelectors, openDeepLinkUrl, restartApp } from '../../helpers/utils';
-import LoginScreen from '../../screenObjects/login';
-import InventoryListScreen from '../../screenObjects/inventoryList';
-import CartContent from '../../screenObjects/cart';
-import AppHeader from '../../screenObjects/appHeader';
-import CheckoutPageOne from '../../screenObjects/checkoutPageOne';
+import LoginScreen from '../../pageObjects/login';
+import InventoryListScreen from '../../pageObjects/inventoryList';
+import CartContent from '../../pageObjects/cart';
+import AppHeader from '../../pageObjects/appHeader';
+import CheckoutPageOne from '../../pageObjects/checkoutPageOne';
 import { LOGIN_USERS } from '../../helpers/e2eConstants';
 
 describe('Cart Content Page', () => {

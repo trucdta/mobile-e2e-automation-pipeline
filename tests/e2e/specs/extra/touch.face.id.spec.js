@@ -1,7 +1,7 @@
 import { restartApp } from '../../helpers/utils';
-import LoginScreen from '../../screenObjects/login';
-import InventoryListScreen from '../../screenObjects/inventoryList';
-import AndroidSettings from '../../screenObjects/AndroidSettings';
+import LoginScreen from '../../pageObjects/login';
+import InventoryListScreen from '../../pageObjects/inventoryList';
+import AndroidSettings from '../../pageObjects/AndroidSettings';
 
 describe('Touch / Face ID', () => {
 	beforeEach(() => {

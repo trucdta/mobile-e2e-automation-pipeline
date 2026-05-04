@@ -7,8 +7,8 @@ exports.config = {
 	// Specify Test Files
 	// ==================
 	specs: [
-		'./tests/e2e/spec/default/*.spec.js',
-		'./tests/e2e/spec/extra/*.spec.js',
+		'./tests/e2e/specs/default/*.spec.js',
+		'./tests/e2e/specs/extra/*.spec.js',
 	],
 	// ===================
 	// Test Configurations
