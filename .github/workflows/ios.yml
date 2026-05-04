@@ -13,10 +13,10 @@ defaults:
     working-directory: ios
 jobs:
   SimulatorRelease:
-    runs-on: macos-13
+    runs-on: macos-latest
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
