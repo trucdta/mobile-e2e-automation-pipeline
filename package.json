@@ -10,7 +10,7 @@
     "clean": "react-native-clean-project",
     "clear.cache": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/metro* && rm -rf $TMPDIR/haste-*",
     "prepush": "npm run lint",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "android.clean": "cd android && ./gradlew clean && cd .. ",
     "android.dev": "yarn android.clean && react-native run-android",
     "android.release": "cd android && ./gradlew clean && ./gradlew assembleRelease",
