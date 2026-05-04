@@ -25,13 +25,13 @@ buildscript {
 }
 
 allprojects {
-    // Fix: Force androidx.core to a version compatible with compileSdk 29.
-    // 1.12.0 requires compileSdk 31+ (lStar attr). 1.6.0 works with compileSdk 29.
-    // Also prevents 1.19.0-alpha01 (minSdk 23) from being pulled in.
+    // Fix: Force androidx.core to a version compatible with minSdk 16 + compileSdk 29.
+    // 1.6.0+ uses Java 8 default interface methods (needs minSdk 24 or desugaring).
+    // 1.3.2 is from the same era as RN 0.63.4 (2020) — fully compatible.
     configurations.all {
         resolutionStrategy {
-            force 'androidx.core:core:1.6.0'
-            force 'androidx.core:core-ktx:1.6.0'
+            force 'androidx.core:core:1.3.2'
+            force 'androidx.core:core-ktx:1.3.2'
         }
     }
     repositories {
