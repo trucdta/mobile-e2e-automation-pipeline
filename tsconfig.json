@@ -5,6 +5,7 @@
     "lib": ["es2019"],
     "strict": true,
     "esModuleInterop": true,
+    "allowJs": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
