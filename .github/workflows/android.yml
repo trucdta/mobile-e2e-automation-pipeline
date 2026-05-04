@@ -32,9 +32,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set short Git SHA
-        shell: bash
-        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
-        working-directory: .
+        run: echo "SHORT_SHA=$(echo $GITHUB_SHA | head -c 7)" >> $GITHUB_ENV
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
