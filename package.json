@@ -13,7 +13,7 @@
     "test": "jest --passWithNoTests",
     "android.clean": "cd android && ./gradlew clean && cd .. ",
     "android.dev": "yarn android.clean && react-native run-android",
-    "android.release": "cd android && ./gradlew clean && ./gradlew assembleRelease",
+    "android.release": "cd android && ./gradlew clean assembleRelease bundleRelease",
     "android.test.local.dev": "wdio tests/e2e/config/wdio.android.local.dev.conf.js",
     "android.test.local.emu": "wdio tests/e2e/config/wdio.android.local.emu.conf.js",
     "android.test.sauce.emu": "wdio tests/e2e/config/wdio.android.sauce.emu.conf.js",

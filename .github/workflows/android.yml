@@ -9,21 +9,69 @@ on:
       - '**.md'
       - '**/ios.yml'
 
+# ─────────────────────────────────────────────────────────────────────────────
+# SECURITY: Principle of Least Privilege - Grant Read-only access by default
+# Mitigates supply chain attacks and prevents malicious workflow injections.
+# ─────────────────────────────────────────────────────────────────────────────
+permissions:
+  contents: read
+
 defaults:
   run:
     working-directory: android
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Environment variables shared across all jobs
-# Format: v{app_version}-build.{run_number}-{short_sha}
-# Example: v3.0.0-build.42-abc1d2e
+# GLOBAL WORKFLOW ENVIRONMENT VARIABLES
 # ─────────────────────────────────────────────────────────────────────────────
 env:
   APP_VERSION: "3.0.0"
+  # PERFORMANCE OPTIMIZATION:
+  # - Disable Daemon: Reduces memory footprint on ephemeral CI runners.
+  # - Enable Parallel: Speeds up task execution across available CPU cores.
+  # - JVM Heap (3GB): Prevents OutOfMemory (OOM) crashes during Android compilation.
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=2 -Dorg.gradle.jvmargs=\"-Xmx3072m -XX:MaxMetaspaceSize=512m\""
 
 jobs:
-  EspressoBuild:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # 1. Code Quality Assurance Job (Lint & Unit Testing)
+  # ─────────────────────────────────────────────────────────────────────────────
+  Quality_Check:
+    name: Code Quality (Lint & Test)
     runs-on: ubuntu-latest
+    timeout-minutes: 15 # RESOURCE LIMIT: Prevent infinite hanging jobs
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn' # OPTIMIZATION: Cache Yarn dependencies
+
+      - name: Install dependencies
+        run: yarn install --ignore-engines --ignore-scripts
+
+      - name: Static Analysis (ESLint, Prettier, tsc)
+        run: |
+          yarn lint
+          yarn format
+          yarn typecheck
+
+      - name: Unit Tests (Jest)
+        run: yarn test
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # 2. UI Automation Build Job (Espresso/Appium Target)
+  # ─────────────────────────────────────────────────────────────────────────────
+  EspressoBuild:
+    name: Build Android Espresso
+    needs: Quality_Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       matrix:
         node-version: [16.x]
@@ -38,12 +86,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
 
       - name: Setup Java 8
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '8'
+          cache: 'gradle' # OPTIMIZATION: Cache Gradle Wrapper & Maven artifacts
 
       - name: Setup Android NDK
         id: setup-ndk
@@ -63,35 +113,27 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Static Analysis (ESLint, Prettier, tsc)
-        run: |
-          yarn lint
-          yarn format
-          yarn typecheck
-
-      - name: Unit Tests (Jest)
-        run: yarn test
-
       - name: Build Android Espresso Debug Build
         run: yarn android.espresso
 
       - name: E2E Automation Testing (Appium)
         run: echo "Running Appium E2E scripts against Android Emulator..."
-        # When running on Mac Mini, replace with: yarn android.test.local.emu
 
-      - name: Distribute to Firebase App Distribution / Google Play
-        run: echo "Uploading to Firebase via Fastlane..."
-
-      - name: Archive Apps
+      - name: Archive Espresso Apps
         uses: actions/upload-artifact@v4
         with:
-          # Naming convention: Android-Sakulala-v{version}-build.{number}-{short_sha}-espresso
           name: Android-Sakulala-v${{ env.APP_VERSION }}-build.${{ github.run_number }}-${{ env.SHORT_SHA }}-espresso
           path: '**/app/build/outputs/apk/**/*.apk'
           retention-days: 30
 
+  # ─────────────────────────────────────────────────────────────────────────────
+  # 3. Production Release Build & Distribution Job (APK + AAB)
+  # ─────────────────────────────────────────────────────────────────────────────
   ReleaseBuild:
+    name: Build & Deploy Release (APK/AAB)
+    needs: Quality_Check
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       matrix:
         node-version: [16.x]
@@ -108,12 +150,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
 
       - name: Setup Java 8
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '8'
+          cache: 'gradle'
 
       - name: Setup Android NDK
         id: setup-ndk
@@ -133,24 +177,27 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build Android Release Build
+      - name: Compile Release Artifacts (APK & AAB)
         run: yarn android.release
 
       - name: Distribute to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
+          # ENTERPRISE SECURITY: Utilize Google Cloud Service Account JSON instead of personal CI tokens.
+          # (Deprecated: Personal CI tokens expose account-wide access and violate least privilege principle)
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
           groups: demo-team
           file: android/app/build/outputs/apk/release/Android.SauceLabs.Sample.App.release.3.0.0.apk
 
-      - name: Distribute to Google Play (Fastlane)
-        run: echo "Uploading AAB to Google Play Console..."
+      - name: Distribute AAB to Google Play Console (Placeholder)
+        run: echo "Uploading Android App Bundle (.aab) to Google Play Console..."
 
-      - name: Archive Apps
+      - name: Archive Production Release Artifacts
         uses: actions/upload-artifact@v4
         with:
-          # Naming convention: Android-Sakulala-v{version}-build.{number}-{short_sha}-release
           name: Android-Sakulala-v${{ env.APP_VERSION }}-build.${{ github.run_number }}-${{ env.SHORT_SHA }}-release
-          path: '**/app/build/outputs/apk/release/**/*.apk'
+          path: |
+            **/app/build/outputs/apk/release/**/*.apk
+            **/app/build/outputs/bundle/release/**/*.aab
           retention-days: 30
